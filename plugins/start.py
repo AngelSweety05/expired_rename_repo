@@ -228,7 +228,7 @@ async def rename_movie_file(file_name, title):
     n_subtitle = f"{subtitle}" if subtitle is not None else ""
     n_codec = f"{codec}" if codec is not None else ""
 
-    new_name = f"{n_resolution} {n_title} {n_codec} {n_quality} {n_languages} {n_subtitle}"
+    new_name = f"{n_resolution} • {n_title} {n_codec} {n_quality} {n_languages} {n_subtitle}"
     clean_new_name = re.sub(r'\s+', ' ', new_name).strip()
 
     return clean_new_name
