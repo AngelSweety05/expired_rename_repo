@@ -247,13 +247,13 @@ async def rename_movie_file(file_name, title):
     resolution, quality, subtitle, languages_list, codec = await extract_movie_details(file_name, title)
     
     n_title = title if title is not None else ""  # Placeholder for extracting title (can enhance this further)
-    n_resolution = f"{resolution}" if resolution is not None else ""
+    n_resolution = f"{resolution} •" if resolution is not None else ""
     n_quality = f"{quality}" if quality is not None else ""
     n_languages = f"[{languages_list}]" if languages_list is not None else ""
     n_subtitle = f"{subtitle}" if subtitle is not None else ""
     n_codec = f"{codec}" if codec is not None else ""
 
-    new_name = f"{n_resolution} • {n_title} {n_codec} {n_quality} {n_languages} {n_subtitle}"
+    new_name = f"{n_resolution} {n_title} {n_codec} {n_quality} {n_languages} {n_subtitle}"
     clean_new_name = re.sub(r'\s+', ' ', new_name).strip()
 
     return clean_new_name
@@ -367,7 +367,7 @@ async def extract_details(file_name, title):
     return season, full_season, episode, resolution, quality, subtitle, languages_list, fullepisode, codec, complete
 
 async def rename_file(file_name, title):
-    season, full_season, episode, resolution, quality, subtitle, languages_list, fullepisode, codec, complete = await extract_details(file_name)
+    season, full_season, episode, resolution, quality, subtitle, languages_list, fullepisode, codec, complete = await extract_details(file_name, title)
     n_title = title if title is not None else ""  # Placeholder for extracting title (can enhance this further)
     # n_title = extract_title(file_name)   # Placeholder for extracting title (can enhance this further)
 
