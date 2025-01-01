@@ -521,7 +521,6 @@ async def process_task(bot, user_id, task_data, lazymsg):
 
         if ph_path:
             try:
-                data = await get_video_metadata(ph_path)
                 watermarked_image_path = f"{os.path.dirname(file_path)}/watermarked_{os.path.basename(ph_path)}"
                 watermarked_image = await add_watermark(ph_path, watermarked_image_path)
                 if watermarked_image:
