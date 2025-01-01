@@ -205,7 +205,8 @@ async def extract_movie_details(file_name):
     # Iterate through the dictionary and detect exact language codes
     for key, language in languages.items():
         # Check for the exact match of the language code in the filename
-        if re.search(r"\b" + re.escape(key) + r"\b", file_name.upper()):
+        # if re.search(r"\b" + re.escape(key) + r"\b", file_name.upper()):
+        if re.search(r"\b" + re.escape(key) + r"\b", file_name.upper()) or re.search(r"\b" + re.escape(language) + r"\b", file_name.upper()):
             language_name = language
             print(f"got language => {language_name}")
             
