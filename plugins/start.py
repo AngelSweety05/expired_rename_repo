@@ -207,6 +207,7 @@ async def extract_movie_details(file_name):
         # Check for the exact match of the language code in the filename
         if re.search(r"\b" + re.escape(key) + r"\b", file_name.upper()):
             language_name = language
+            print(f"got language => {language_name}")
             
             # Check if 'fandub' or 'org' is in the file name and add the appropriate tag
             if "fandub" in file_name.lower():
@@ -217,11 +218,11 @@ async def extract_movie_details(file_name):
             detected_languages.append(language_name)
 
     # Remove duplicates (if the same language appears more than once)
-    detected_languages = list(dict.fromkeys(detected_languages))
+    # detected_languages = list(dict.fromkeys(detected_languages))
 
     # Join all detected languages into a string
     languages_list = " - ".join(detected_languages) if detected_languages else None
-
+    print(detected_languages)
 # ============================================== WORKING
     # # Languages
     # detected_languages = []
