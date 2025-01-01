@@ -201,21 +201,44 @@ async def extract_movie_details(file_name):
             break
 
     # Languages
-    detected_languages = []
-    print(detected_languages)
-    clean_file_name = re.sub(r"@[\w_]+", "", file_name)
-    for key in languages:
-        if key in clean_file_name.lower():
-            language_name = languages[key]
-            if "fandub" in clean_file_name.lower():
-                language_name += "(fanDub)"
-            elif "org" in clean_file_name.lower():
-                language_name += "(org)"
+    # detected_languages = []
+    # print(detected_languages)
+    # clean_file_name = re.sub(r"@[\w_]+", "", file_name)
+    # for key in languages:
+    #     if key in clean_file_name.lower():
+    #         language_name = languages[key]
+    #         if "fandub" in clean_file_name.lower():
+    #             language_name += "(fanDub)"
+    #         elif "org" in clean_file_name.lower():
+    #             language_name += "(org)"
 
+    #         detected_languages.append(language_name)
+
+    # languages_list = "-".join(detected_languages) if detected_languages else None
+    # print(languages_list)
+
+    # Detect languages and handle fandub
+    detected_languages = []
+    for key, language in languages.items():
+        # Check for the presence of the key in the file name
+        if key.lower() in file_name.lower():
+            # Start with the language name
+            language_name = language
+
+            # Check for 'fandub' near the key or anywhere in the file name
+            if f"{key}(fandub)".lower() in file_name.lower() or "fandub" in file_name.lower():
+                language_name += " (fanDub)"
+            elif "org" in file_name.lower():
+                language_name += " (org)"
+            
+            # Append to the detected languages list
             detected_languages.append(language_name)
 
-    languages_list = "-".join(detected_languages) if detected_languages else None
-    print(languages_list)
+    # Remove duplicates to avoid repeating the same language
+    detected_languages = list(dict.fromkeys(detected_languages))
+    print(detected_languages)
+    # Join all detected languages with a separator
+    languages_list = " - ".join(detected_languages) if detected_languages else None
 
     return resolution, quality, subtitle, languages_list, codec
 
