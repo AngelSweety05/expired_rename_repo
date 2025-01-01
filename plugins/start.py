@@ -386,9 +386,9 @@ async def extract_details(file_name):
     # Languages
     detected_languages = []
     print(detected_languages)
-    clean_file_name = re.sub(r"@[\w_]+", "", file_name)
+    clean_file_name = file_name
     for key in languages:
-        if key in clean_file_name.lower():
+        if key.lower() in clean_file_name.lower():
             language_name = languages[key]
             if "fandub" in clean_file_name.lower():
                 language_name += "(fanDub)"
