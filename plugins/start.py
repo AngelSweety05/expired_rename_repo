@@ -233,7 +233,7 @@ async def extract_movie_details(file_name):
 # ============================================== WORKING
     # Languages
     detected_languages = []
-    for key, language in languages:
+    for key in languages:
         if key.lower() in file_name.lower():
             language_name = languages[key]
             if "fandub" in file_name.lower():
