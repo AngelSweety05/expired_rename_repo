@@ -200,45 +200,66 @@ async def extract_movie_details(file_name):
             subtitle = subtitles[key]
             break
 
-    # Languages
+    detected_languages = []
+
+    # Iterate through the dictionary and detect exact language codes
+    for key, language in languages.items():
+        # Check for the exact match of the language code in the filename
+        if re.search(r"\b" + re.escape(key) + r"\b", file_name.upper()):
+            language_name = language
+            
+            # Check if 'fandub' or 'org' is in the file name and add the appropriate tag
+            if "fandub" in file_name.lower():
+                language_name += "(fanDub)"
+            elif "org" in file_name.lower():
+                language_name += "(org)"
+            
+            detected_languages.append(language_name)
+
+    # Remove duplicates (if the same language appears more than once)
+    detected_languages = list(dict.fromkeys(detected_languages))
+
+    # Join all detected languages into a string
+    languages_list = " - ".join(detected_languages) if detected_languages else None
+
+# ============================================== WORKING
+    # # Languages
     # detected_languages = []
-    # print(detected_languages)
-    # clean_file_name = re.sub(r"@[\w_]+", "", file_name)
-    # for key in languages:
-    #     if key in clean_file_name.lower():
+    # for key, language in languages:
+    #     if key.lower() in file_name.lower():
     #         language_name = languages[key]
-    #         if "fandub" in clean_file_name.lower():
+    #         if "fandub" in file_name.lower():
     #             language_name += "(fanDub)"
-    #         elif "org" in clean_file_name.lower():
+    #         elif "org" in file_name.lower():
     #             language_name += "(org)"
 
     #         detected_languages.append(language_name)
 
     # languages_list = "-".join(detected_languages) if detected_languages else None
     # print(languages_list)
-
+# ===========================================
     # Detect languages and handle fandub
-    detected_languages = []
-    for key, language in languages.items():
-        # Check for the presence of the key in the file name
-        if key.lower() in file_name.lower():
-            # Start with the language name
-            language_name = language
+    # detected_languages = []
+    # for key, language in languages.items():
+    #     # Check for the presence of the key in the file name
+    #     if key.lower() in file_name.lower():
+    #         # Start with the language name
+    #         language_name = language
 
-            # Check for 'fandub' near the key or anywhere in the file name
-            if f"{key}(fandub)".lower() in file_name.lower() or "fandub" in file_name.lower():
-                language_name += " (fanDub)"
-            elif "org" in file_name.lower():
-                language_name += " (org)"
+    #         # Check for 'fandub' near the key or anywhere in the file name
+    #         if f"{key}(fandub)".lower() in file_name.lower() or "fandub" in file_name.lower():
+    #             language_name += " (fanDub)"
+    #         elif "org" in file_name.lower():
+    #             language_name += " (org)"
             
-            # Append to the detected languages list
-            detected_languages.append(language_name)
+    #         # Append to the detected languages list
+    #         detected_languages.append(language_name)
 
-    # Remove duplicates to avoid repeating the same language
-    detected_languages = list(dict.fromkeys(detected_languages))
-    print(detected_languages)
-    # Join all detected languages with a separator
-    languages_list = " - ".join(detected_languages) if detected_languages else None
+    # # Remove duplicates to avoid repeating the same language
+    # detected_languages = list(dict.fromkeys(detected_languages))
+    # print(detected_languages)
+    # # Join all detected languages with a separator
+    # languages_list = " - ".join(detected_languages) if detected_languages else None
 
     return resolution, quality, subtitle, languages_list, codec
 
