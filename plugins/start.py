@@ -164,6 +164,34 @@ multi_episode_regex2 = r"EP(\d{1,3})\s*[-_]\s*(?!\d{3,4}p)(\d{1,3})"  # Matches 
 special_episode_regex = r"S(\d{1,3})E00"
 complete_regex = r"Complete"  # Detects the word "Complete"
 
+
+# 
+
+
+def remove_unwanted_parts(file_name, title):
+    # Remove the title from the filename
+    file_name = file_name.lower().replace(title.lower(), '')
+    
+    # Remove resolutions
+    for res in resolutions:
+        file_name = file_name.replace(res, '')
+
+    # Remove codecs
+    for codec in codecs:
+        file_name = file_name.replace(codec, '')
+
+    # Remove subtitles
+    for subtitle in subtitles:
+        file_name = file_name.replace(subtitle, '')
+
+    # Remove any other known unwanted elements like season/episode patterns, extra spaces, special characters
+    file_name = re.sub(r'[^\w\s]', '', file_name)  # Remove special characters
+
+    # Clean extra spaces
+    file_name = ' '.join(file_name.split())  # Remove extra spaces
+    
+    return file_name.strip()
+
 # Function to extract season, episode, resolution, quality, and languages
 async def extract_movie_details(file_name, title):
     # Resolution
@@ -201,27 +229,16 @@ async def extract_movie_details(file_name, title):
             break
 
 # =================== little complex =========================== 
-    # Remove the passed title from the file name (assuming title is a part of the filename)
-    file_name = re.sub(rf"\b{re.escape(title)}\b", "", file_name, flags=re.IGNORECASE)
-
-
-    # Remove codecs (e.g., H.265, HEVC)
-    for codec in codecs.keys():
-        file_name = re.sub(r"\b" + re.escape(codec) + r"\b", "", file_name, flags=re.IGNORECASE)
-
-    # Remove subtitles (e.g., subtitles, sub)
-    for subtitle in subtitles.keys():
-        file_name = re.sub(r"\b" + re.escape(subtitle) + r"\b", "", file_name, flags=re.IGNORECASE)
-
-
+    cleaned_file_name = remove_unwanted_parts(file_name, title)
+    print(cleaned_file_name)
     # Languages
     detected_languages = []
     for key in languages:
-        if key.lower() in file_name.lower():
+        if key.lower() in cleaned_file_name.lower():
             language_name = languages[key]
-            if "fandub" in file_name.lower():
+            if "fandub" in cleaned_file_name.lower():
                 language_name += "(fanDub)"
-            elif "org" in file_name.lower():
+            elif "org" in cleaned_file_name.lower():
                 language_name += "(org)"
 
             detected_languages.append(language_name)
