@@ -6,7 +6,6 @@ from hachoir.parser import createParser
 from helpo.database import db
 import os
 import humanize
-from lazydeveloper.ffmpeg import get_video_metadata
 from PIL import Image
 import time
 from config import *
