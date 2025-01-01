@@ -174,7 +174,6 @@ complete_regex = r"Complete"  # Detects the word "Complete"
 # Function to extract season, episode, resolution, quality, and languages
 async def extract_movie_details(file_name, title):
     # Resolution
-    file_name = re.sub(rf"\b{re.escape(title)}\b", "", file_name, flags=re.IGNORECASE)
 
     resolution = None
     for key in resolutions:
@@ -229,6 +228,7 @@ async def extract_movie_details(file_name, title):
     # Remove season/episode patterns (e.g., 1x01, 2x03, etc.)
     file_name = re.sub(r"\d{1,2}x\d{1,2}", "", file_name)
 
+    print(file_name)
     for key, language in languages.items():
         # Check for the presence of the key in the file name
         if key.lower() in file_name.lower() or language.lower() in file_name.lower():
@@ -236,7 +236,7 @@ async def extract_movie_details(file_name, title):
             language_name = language
 
             # Check for 'fandub' near the key or anywhere in the file name
-            if f"{key}(fandub)".lower() in file_name.lower() or "fandub" in file_name.lower():
+            if key.lower() in file_name.lower() or language.lower in file_name.lower():
                 language_name += " (fanDub)"
             elif "org" in file_name.lower():
                 language_name += " (org)"
