@@ -82,8 +82,6 @@ languages = {
     "FIN": "Finnish",
     "UKR": "Ukrainian",
     "ROM": "Romanian",
-    "FIL": "Filipino",
-    "SRB": "Serbian",
 }
 
 qualities = {
@@ -280,7 +278,7 @@ async def is_webseries(file_name):
         return True  # File is part of a web series
     return False  # Not a web series file
 
-async def extract_details(file_name):
+async def extract_details(file_name, title):
     # Season and Episode
     season_match = re.search(season_regex, file_name, re.IGNORECASE)
     multi_episode_match1 = re.search(multi_episode_regex1, file_name, re.IGNORECASE)
@@ -349,19 +347,23 @@ async def extract_details(file_name):
             break
 
     # Languages
+    cleaned_file_name = remove_unwanted_parts(file_name, title)
+    print(cleaned_file_name)
+    # Languages
     detected_languages = []
     for key in languages:
-        if key.lower() in file_name.lower():
+        if key.lower() in cleaned_file_name.lower():
             language_name = languages[key]
-            if "fandub" in file_name.lower():
+            if "fandub" in cleaned_file_name.lower():
                 language_name += "(fanDub)"
-            elif "org" in file_name.lower():
+            elif "org" in cleaned_file_name.lower():
                 language_name += "(org)"
 
             detected_languages.append(language_name)
     
     languages_list = "-".join(detected_languages) if detected_languages else None
     print(languages_list)
+
     return season, full_season, episode, resolution, quality, subtitle, languages_list, fullepisode, codec, complete
 
 async def rename_file(file_name, title):
