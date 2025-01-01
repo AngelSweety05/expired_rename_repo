@@ -542,7 +542,6 @@ async def process_task(bot, user_id, task_data, lazymsg):
             print(e)
             return
 
-
         
         # print(f"🤳 Got Thumbnail |=> ✅")
         await lazymsg.edit("<b>⚡ ᴘʀᴇᴘᴀʀɪɴɢ ᴛᴏ ᴜᴘʟᴏᴀᴅ...</b>")
