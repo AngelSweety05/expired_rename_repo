@@ -532,21 +532,18 @@ async def process_task(bot, user_id, task_data, lazymsg):
         else:
             print("Failed to capture screenshot.")
 
-        # try:
-        #     video_clip_path = f"{os.path.dirname(file_path)}/watermarked_video{os.path.basename(file_path)}"
-        #     final_video = await add_intro_to_video(file_path, video_clip_path, lazymsg)
-        #     if final_video:
-        #         print(f"Watermarked image saved to: {final_video}")
-        #     else:
-        #         print("Failed to add watermark.")
-        # except Exception as e:
-        #     print(e)
+        try:
+            video_clip_path = f"{os.path.dirname(file_path)}/watermarked_video{os.path.basename(file_path)}"
+            final_video = await add_intro_to_video(file_path, video_clip_path, lazymsg)
+            if final_video:
+                print(f"Watermarked video saved to: {final_video}")
+            else:
+                print("Failed to add watermark.")
+        except Exception as e:
+            print(e)
+            return
 
 
-        # Image.open(ph_path).convert("RGB").save(ph_path)
-        # img = Image.open(ph_path)
-        # img.resize((320, 320))
-        # img.save(ph_path, "JPEG")
         
         # print(f"🤳 Got Thumbnail |=> ✅")
         await lazymsg.edit("<b>⚡ ᴘʀᴇᴘᴀʀɪɴɢ ᴛᴏ ᴜᴘʟᴏᴀᴅ...</b>")
