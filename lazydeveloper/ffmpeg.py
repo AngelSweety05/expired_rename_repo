@@ -9,7 +9,6 @@ from moviepy.editor import VideoFileClip, concatenate_videoclips
 import time
 import os
 import requests
-from tqdm import tqdm
 
 import requests
 from PIL import Image
@@ -154,7 +153,83 @@ async def add_intro_to_video(main_video_path, output_path, msg):
         return None
 
 
+# ====================
+# ====================
 
+import logging
+from pymediainfo import MediaInfo
+
+# Set up logging configuration
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
+def get_video_metadata(file_path):
+    # Log that we're starting to extract metadata
+    logger.info(f"Extracting metadata from file: {file_path}")
+    
+    try:
+        # Extract media information
+        media_info = MediaInfo.parse(file_path)
+        
+        # Initialize variables
+        resolution = None
+        languages = []
+        subtitles = []
+        
+        # Iterate through the tracks to find the video, audio, and subtitle tracks
+        for track in media_info.tracks:
+            if track.track_type == 'Video':
+                resolution = f"{track.width}x{track.height}"
+                logger.info(f"Found resolution: {resolution}")
+            
+            if track.track_type == 'Audio' and track.language:
+                languages.append(track.language)
+                logger.info(f"Found audio language: {track.language}")
+            
+            if track.track_type == 'Text' and track.language:
+                subtitles.append(track.language)
+                logger.info(f"Found subtitle language: {track.language}")
+        
+        # Return resolution, languages, and subtitles
+        return resolution, languages, subtitles
+    
+    except Exception as e:
+        logger.error(f"Error extracting metadata: {e}")
+        return None, [], []
+    
+
+# ====================
+# ====================
+
+# import ffmpeg
+# import json
+
+# def get_video_metadata(file_path):
+#     # Use ffmpeg to fetch the file's metadata
+#     probe = ffmpeg.probe(file_path, v='error', select_streams='v:0', show_entries='stream=width,height,codec_name,disposition', output_format='json')
+    
+#     # Parse the metadata
+#     metadata = json.loads(probe)
+    
+#     # Get resolution
+#     width = metadata['streams'][0]['width']
+#     height = metadata['streams'][0]['height']
+#     resolution = f"{width}x{height}"
+
+#     # Get language (from the 'tags' field)
+#     languages = []
+#     for stream in metadata['streams']:
+#         if 'tags' in stream and 'language' in stream['tags']:
+#             languages.append(stream['tags']['language'])
+    
+#     # Get subtitle languages
+#     subtitles = []
+#     for stream in metadata['streams']:
+#         if stream['codec_type'] == 'subtitle':
+#             if 'tags' in stream and 'language' in stream['tags']:
+#                 subtitles.append(stream['tags']['language'])
+    
+#     return resolution, languages, subtitles
 
 
 
