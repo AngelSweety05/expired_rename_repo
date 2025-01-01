@@ -49,8 +49,6 @@ resolutions = {
 }
 
 languages = {
-    "Dual Audio":"Dual Audio",
-    "Multi Audio":"Multi Audio",
     "HIN": "Hindi",
     "ENG": "English",
     "TAM": "Tamil",
@@ -172,9 +170,8 @@ special_episode_regex = r"S(\d{1,3})E00"
 complete_regex = r"Complete"  # Detects the word "Complete"
 
 # Function to extract season, episode, resolution, quality, and languages
-async def extract_movie_details(file_name, title):
+async def extract_movie_details(file_name):
     # Resolution
-
     resolution = None
     for key in resolutions:
         if key.lower() in file_name.lower():
@@ -202,59 +199,88 @@ async def extract_movie_details(file_name, title):
         if key.lower() in file_name.lower():
             subtitle = subtitles[key]
             break
-    
 
-    # TRYING SUPER MTHOD TO GET THE EXACT LANGUAGE LIST ❤ @lAZYDeveloperr🧩
-    detected_languages = []
-    # Remove the title ()
-    file_name = re.sub(rf"\b{re.escape(title)}\b", "", file_name, flags=re.IGNORECASE)
 
-    # Remove resolutions (e.g., 720p, 1080p)
-    for resolution in resolutions.keys():
-        file_name = re.sub(r"\b" + re.escape(resolution) + r"\b", "", file_name, flags=re.IGNORECASE)
 
-    # Remove codecs (e.g., H.265, HEVC)
-    for codec in codecs.keys():
-        file_name = re.sub(r"\b" + re.escape(codec) + r"\b", "", file_name, flags=re.IGNORECASE)
+# ========================================================
+    # detected_languages = []
+    # print("searching for languages")
+    # # Iterate through the dictionary and detect exact language codes
+    # for key, language in languages.items():
+    #     # Check for the exact match of the language code in the filename
+    #     # if re.search(r"\b" + re.escape(key) + r"\b", file_name.upper()):
+    #     # if re.search(r"\b" + re.escape(key) + r"\b", file_name.upper()) or re.search(r"\b" + re.escape(language) + r"\b", file_name.upper()):
+    #     if key.lower() in file_name.lower() or language.lower in file_name.lower():
 
-    # Remove subtitles (e.g., subtitles, sub)
-    for subtitle in subtitles.keys():
-        file_name = re.sub(r"\b" + re.escape(subtitle) + r"\b", "", file_name, flags=re.IGNORECASE)
-
-    # Remove formats (e.g., BluRay, WEBRip, etc.)
-    for quality in qualities.keys():
-        file_name = re.sub(r"\b" + re.escape(quality) + r"\b", "", file_name, flags=re.IGNORECASE)
-
-    # Remove season/episode patterns (e.g., 1x01, 2x03, etc.)
-    file_name = re.sub(r"\d{1,2}x\d{1,2}", "", file_name)
-
-    print(file_name)
-    for key, language in languages.items():
-        # Check for the presence of the key in the file name
-        if key.lower() in file_name.lower() or language.lower() in file_name.lower():
-            # Start with the language name
-            language_name = language
-
-            # Check for 'fandub' near the key or anywhere in the file name
-            if key.lower() in file_name.lower() or language.lower in file_name.lower():
-                language_name += " (fanDub)"
-            elif "org" in file_name.lower():
-                language_name += " (org)"
+    #         language_name = language
+    #         print(f"got language => {language_name}")
             
-            # Append to the detected languages list
-            detected_languages.append(language_name)
+    #         # Check if 'fandub' or 'org' is in the file name and add the appropriate tag
+    #         if "fandub" in file_name.lower():
+    #             language_name += "(fanDub)"
+    #         elif "org" in file_name.lower():
+    #             language_name += "(org)"
+            
+    #         detected_languages.append(language_name)
 
-    # Remove duplicates to avoid repeating the same language
-    detected_languages = list(dict.fromkeys(detected_languages))
-    print(detected_languages)
-    # Join all detected languages with a separator
-    languages_list = " - ".join(detected_languages) if detected_languages else None
+    # # Remove duplicates (if the same language appears more than once)
+    # detected_languages = list(dict.fromkeys(detected_languages))
+
+    # # Join all detected languages into a string
+    # languages_list = " - ".join(detected_languages) if detected_languages else None
+    # print(detected_languages)
+# ============================================== WORKING
+    # Languages
+    detected_languages = []
+    for key, language in languages:
+        if key.lower() in file_name.lower():
+            language_name = languages[key]
+            if "fandub" in file_name.lower():
+                language_name += "(fanDub)"
+            elif "org" in file_name.lower():
+                language_name += "(org)"
+
+            detected_languages.append(language_name)
+        # elif language.lower() in file_name.lower():
+        #     language_name = languages[key]
+        #     if "fandub" in file_name.lower():
+        #         language_name += "(fanDub)"
+        #     elif "org" in file_name.lower():
+        #         language_name += "(org)"
+
+            detected_languages.append(language_name)
+    
+    languages_list = "-".join(detected_languages) if detected_languages else None
+    print(languages_list)
+# ===========================================
+    # Detect languages and handle fandub
+    # detected_languages = []
+    # for key, language in languages.items():
+    #     # Check for the presence of the key in the file name
+    #     if key.lower() in file_name.lower():
+    #         # Start with the language name
+    #         language_name = language
+
+    #         # Check for 'fandub' near the key or anywhere in the file name
+    #         if f"{key}(fandub)".lower() in file_name.lower() or "fandub" in file_name.lower():
+    #             language_name += " (fanDub)"
+    #         elif "org" in file_name.lower():
+    #             language_name += " (org)"
+            
+    #         # Append to the detected languages list
+    #         detected_languages.append(language_name)
+
+    # # Remove duplicates to avoid repeating the same language
+    # detected_languages = list(dict.fromkeys(detected_languages))
+    # print(detected_languages)
+    # # Join all detected languages with a separator
+    # languages_list = " - ".join(detected_languages) if detected_languages else None
 
     return resolution, quality, subtitle, languages_list, codec
 
 # Renaming logic
 async def rename_movie_file(file_name, title):
-    resolution, quality, subtitle, languages_list, codec = await extract_movie_details(file_name, title)
+    resolution, quality, subtitle, languages_list, codec = await extract_movie_details(file_name)
     
     n_title = title if title is not None else ""  # Placeholder for extracting title (can enhance this further)
     n_resolution = f"{resolution}" if resolution is not None else ""
