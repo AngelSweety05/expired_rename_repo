@@ -242,14 +242,6 @@ async def extract_movie_details(file_name):
                 language_name += "(org)"
 
             detected_languages.append(language_name)
-        # elif language.lower() in file_name.lower():
-        #     language_name = languages[key]
-        #     if "fandub" in file_name.lower():
-        #         language_name += "(fanDub)"
-        #     elif "org" in file_name.lower():
-        #         language_name += "(org)"
-
-            detected_languages.append(language_name)
     
     languages_list = "-".join(detected_languages) if detected_languages else None
     print(languages_list)
@@ -386,9 +378,9 @@ async def extract_details(file_name):
     # Languages
     detected_languages = []
     print(detected_languages)
-    clean_file_name = file_name
+    clean_file_name = re.sub(r"@[\w_]+", "", file_name)
     for key in languages:
-        if key.lower() in clean_file_name.lower():
+        if key in clean_file_name.lower():
             language_name = languages[key]
             if "fandub" in clean_file_name.lower():
                 language_name += "(fanDub)"
