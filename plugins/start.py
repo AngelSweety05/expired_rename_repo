@@ -174,6 +174,8 @@ complete_regex = r"Complete"  # Detects the word "Complete"
 # Function to extract season, episode, resolution, quality, and languages
 async def extract_movie_details(file_name, title):
     # Resolution
+    file_name = re.sub(rf"\b{re.escape(title)}\b", "", file_name, flags=re.IGNORECASE)
+
     resolution = None
     for key in resolutions:
         if key.lower() in file_name.lower():
@@ -201,8 +203,32 @@ async def extract_movie_details(file_name, title):
         if key.lower() in file_name.lower():
             subtitle = subtitles[key]
             break
+    
 
+    # TRYING SUPER MTHOD TO GET THE EXACT LANGUAGE LIST ❤ @lAZYDeveloperr🧩
     detected_languages = []
+    # Remove the title ()
+    file_name = re.sub(rf"\b{re.escape(title)}\b", "", file_name, flags=re.IGNORECASE)
+
+    # Remove resolutions (e.g., 720p, 1080p)
+    for resolution in resolutions.keys():
+        file_name = re.sub(r"\b" + re.escape(resolution) + r"\b", "", file_name, flags=re.IGNORECASE)
+
+    # Remove codecs (e.g., H.265, HEVC)
+    for codec in codecs.keys():
+        file_name = re.sub(r"\b" + re.escape(codec) + r"\b", "", file_name, flags=re.IGNORECASE)
+
+    # Remove subtitles (e.g., subtitles, sub)
+    for subtitle in subtitles.keys():
+        file_name = re.sub(r"\b" + re.escape(subtitle) + r"\b", "", file_name, flags=re.IGNORECASE)
+
+    # Remove formats (e.g., BluRay, WEBRip, etc.)
+    for quality in qualities.keys():
+        file_name = re.sub(r"\b" + re.escape(quality) + r"\b", "", file_name, flags=re.IGNORECASE)
+
+    # Remove season/episode patterns (e.g., 1x01, 2x03, etc.)
+    file_name = re.sub(r"\d{1,2}x\d{1,2}", "", file_name)
+
     for key, language in languages.items():
         # Check for the presence of the key in the file name
         if key.lower() in file_name.lower() or language.lower() in file_name.lower():
