@@ -17,6 +17,8 @@ RUN apt-get update && apt-get install -y \
 # Alternatively, you can directly install moviepy if not in requirements.txt
 RUN pip3 install --no-cache-dir moviepy
 
+RUN pip3 install --no-cache-dir pymediainfo
+
 RUN pip3 install --no-cache-dir -r requirements.txt
 
 # Alternatively, if you want to install moviepy directly, you can do it like this:
