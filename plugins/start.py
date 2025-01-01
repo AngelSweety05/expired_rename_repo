@@ -204,9 +204,6 @@ async def extract_movie_details(file_name, title):
     # Remove the passed title from the file name (assuming title is a part of the filename)
     file_name = re.sub(rf"\b{re.escape(title)}\b", "", file_name, flags=re.IGNORECASE)
 
-    # Remove resolutions (e.g., 720p, 1080p)
-    for resolution in resolutions.keys():
-        file_name = re.sub(r"\b" + re.escape(resolution) + r"\b", "", file_name, flags=re.IGNORECASE)
 
     # Remove codecs (e.g., H.265, HEVC)
     for codec in codecs.keys():
@@ -216,12 +213,6 @@ async def extract_movie_details(file_name, title):
     for subtitle in subtitles.keys():
         file_name = re.sub(r"\b" + re.escape(subtitle) + r"\b", "", file_name, flags=re.IGNORECASE)
 
-    # Remove formats (e.g., BluRay, WEBRip, etc.)
-    for quality in qualities.keys():
-        file_name = re.sub(r"\b" + re.escape(quality) + r"\b", "", file_name, flags=re.IGNORECASE)
-
-    # Remove season/episode patterns (e.g., 1x01, 2x03, etc.)
-    file_name = re.sub(r"\d{1,2}x\d{1,2}", "", file_name)
 
     # Languages
     detected_languages = []
