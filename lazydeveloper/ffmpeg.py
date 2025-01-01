@@ -4,7 +4,6 @@ import asyncio
 from hachoir.metadata import extractMetadata
 from hachoir.parser import createParser
 from PIL import Image, ImageDraw, ImageFont
-import tempfile  # Add this import
 from moviepy.editor import VideoFileClip, concatenate_videoclips
 import time
 import os
@@ -121,7 +120,8 @@ async def progress_bar(current, total, msg, last_reported=0):
 async def add_intro_to_video(main_video_path, output_path, msg):
     try:
         await msg.edit("⚙ Processing to add watermark to video file... \n🧩This may take some time, please be patience \nThank You 💘")
-        intro_url = "https://raw.githubusercontent.com/criminalCoder/kkk/main/clips/clip.mp4"
+        # intro_url = "https://raw.githubusercontent.com/criminalCoder/kkk/main/clips/clip.mp4"
+        intro_url = "https://raw.githubusercontent.com/AngelSweety05/expired_rename_repo/blob/main/clips/video_2025-01-01_07-50-44.mp4"
         intro_path = f"{time.time()}/intro.mp4"
 
         # Download the intro clip
@@ -156,46 +156,46 @@ async def add_intro_to_video(main_video_path, output_path, msg):
 # ====================
 # ====================
 
-import logging
-from pymediainfo import MediaInfo
+# import logging
+# from pymediainfo import MediaInfo
 
-# Set up logging configuration
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-logger = logging.getLogger(__name__)
+# # Set up logging configuration
+# logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+# logger = logging.getLogger(__name__)
 
-def get_video_metadata(file_path):
-    # Log that we're starting to extract metadata
-    logger.info(f"Extracting metadata from file: {file_path}")
+# def get_video_metadata(file_path):
+#     # Log that we're starting to extract metadata
+#     logger.info(f"Extracting metadata from file: {file_path}")
     
-    try:
-        # Extract media information
-        media_info = MediaInfo.parse(file_path)
+#     try:
+#         # Extract media information
+#         media_info = MediaInfo.parse(file_path)
         
-        # Initialize variables
-        resolution = None
-        languages = []
-        subtitles = []
+#         # Initialize variables
+#         resolution = None
+#         languages = []
+#         subtitles = []
         
-        # Iterate through the tracks to find the video, audio, and subtitle tracks
-        for track in media_info.tracks:
-            if track.track_type == 'Video':
-                resolution = f"{track.width}x{track.height}"
-                logger.info(f"Found resolution: {resolution}")
+#         # Iterate through the tracks to find the video, audio, and subtitle tracks
+#         for track in media_info.tracks:
+#             if track.track_type == 'Video':
+#                 resolution = f"{track.width}x{track.height}"
+#                 logger.info(f"Found resolution: {resolution}")
             
-            if track.track_type == 'Audio' and track.language:
-                languages.append(track.language)
-                logger.info(f"Found audio language: {track.language}")
+#             if track.track_type == 'Audio' and track.language:
+#                 languages.append(track.language)
+#                 logger.info(f"Found audio language: {track.language}")
             
-            if track.track_type == 'Text' and track.language:
-                subtitles.append(track.language)
-                logger.info(f"Found subtitle language: {track.language}")
+#             if track.track_type == 'Text' and track.language:
+#                 subtitles.append(track.language)
+#                 logger.info(f"Found subtitle language: {track.language}")
         
-        # Return resolution, languages, and subtitles
-        return resolution, languages, subtitles
+#         # Return resolution, languages, and subtitles
+#         return resolution, languages, subtitles
     
-    except Exception as e:
-        logger.error(f"Error extracting metadata: {e}")
-        return None, [], []
+#     except Exception as e:
+#         logger.error(f"Error extracting metadata: {e}")
+#         return None, [], []
     
 
 # ====================
