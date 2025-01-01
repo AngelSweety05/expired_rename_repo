@@ -49,6 +49,7 @@ resolutions = {
 }
 
 languages = {
+    "dual audio": "dual audio",
     "HIN": "Hindi",
     "ENG": "English",
     "TAM": "Tamil",
