@@ -219,7 +219,7 @@ async def extract_movie_details(file_name):
             detected_languages.append(language_name)
 
     # Remove duplicates (if the same language appears more than once)
-    # detected_languages = list(dict.fromkeys(detected_languages))
+    detected_languages = list(dict.fromkeys(detected_languages))
 
     # Join all detected languages into a string
     languages_list = " - ".join(detected_languages) if detected_languages else None
