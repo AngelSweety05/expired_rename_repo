@@ -22,6 +22,9 @@ import random
 user_tasks = {}
 user_locks = {}
 
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 @Client.on_callback_query(filters.regex('cancel'))
 async def cancel(bot, update):
@@ -224,40 +227,6 @@ async def get_task_details(bot, message):
     except Exception as e:
         print(f"Error in get_task_details: {e}")
 
-# async def update_task_status_message(bot, user_id):
-#     """Send a new status message and delete the old one."""
-#     if user_id not in user_tasks:
-#         return  # No tasks for this user
-
-#     # Fetch current task stats
-#     active_count = user_tasks[user_id]["active"]
-#     queue_count = user_tasks[user_id]["queue"].qsize()
-
-#     # Build the status message
-#     status_text = (
-#         f"<blockquote>🛠 Task Status</blockquote>\n"
-#         f"🚀 <b>Active Tasks</b>: <code>{active_count}</code>\n"
-#         f"⏳ <b>In Queue</b>: <code>{queue_count}</code>\n"
-#     )
-
-#     # Send the new status message
-#     try:
-#         # Delete the previous status message if it exists
-#         if user_id in task_status_messages:
-#             try:
-#                 await task_status_messages[user_id].delete()
-#             except Exception as e:
-#                 print(f"Failed to delete previous status message: {e}")
-
-#         # Send a new status message and save its reference
-#         new_status_message = await bot.send_message(
-#             chat_id=user_id,
-#             text=status_text,
-#             parse_mode=enums.ParseMode.HTML,
-#         )
-#         task_status_messages[user_id] = new_status_message
-#     except Exception as e:
-#         print(f"Failed to send new task status message: {e}")
 
 async def generate_short_task_id():
     """Generate a hash-based unique short task ID."""
@@ -265,54 +234,6 @@ async def generate_short_task_id():
     hash_object = hashlib.md5(full_uuid.encode())  # Use MD5 hashing
     return hash_object.hexdigest()[:8]
 
-# async def update_task_status_message(bot, user_id):
-#     """Send a detailed status message and delete the old one."""
-#     if user_id not in user_tasks:
-#         return  # No tasks for this user
-
-#     # Fetch current task stats
-#     active_count = user_tasks[user_id]["active"]
-#     queue = list(user_tasks[user_id]["queue"]._queue)  # Extract queued tasks
-#     queue_count = len(queue)
-
-#     # Build the detailed status message
-#     status_text = "<blockquote><b>🥂🍟⏳ ᴛʜᴇ ᴛᴀꜱᴋ ᴍᴀɴᴀɢᴇʀ ⏳🍟🥂</b></blockquote>\n"
-#     status_text += "╭━━❰❤.<b>ʟᴀᴢʏᴅᴇᴠᴇʟᴏᴘᴇʀ</b>.❤❱━━➣\n"
-
-#     for index, task in enumerate(queue, start=1):
-#         task_id = task["id"]
-#         await asyncio.sleep(1)
-#         status_text += (
-#             f"┣⪼🍿 <b>ᴛᴀꜱᴋ {index}</b> ➣ <code>{task_id}</code>\n"
-#             f"┣⪼⚙ <b><a href='https://t.me/{bot.username}?start=gettask_{task_id}'>ɢᴇᴛ ᴅᴇᴛᴀɪʟꜱ : ᴄʟɪᴄᴋ ʜᴇʀᴇ</a></b>\n"
-#             f"┣━━━━━━━━━━━━━━━━━━━ \n"
-#         )
-
-#     # Add summary of active and queued tasks
-#     await asyncio.sleep(1)
-#     status_text += (
-#         f"┣📜 <b>ᴀᴄᴛɪᴠᴇ ᴛᴀꜱᴋꜱ</b>: <code>{active_count}</code> | ⏳<b>ɪɴ ϙᴜᴇᴜᴇ</b>: <code>{queue_count}</code>\n"
-#         "╰━━━━━━━━━━━━━━━━━━━➣"
-#     )
-
-#     # Delete the previous status message if it exists
-#     if user_id in task_status_messages:
-#         try:
-#             await task_status_messages[user_id].delete()
-#         except Exception as e:
-#             print(f"Failed to delete previous status message: {e}")
-
-#     # Send a new detailed status message and save its reference
-#     try:
-#         new_status_message = await bot.send_message(
-#             chat_id=user_id,
-#             text=status_text,
-#             parse_mode=enums.ParseMode.HTML,
-#             disable_web_page_preview=True,
-#         )
-#         task_status_messages[user_id] = new_status_message
-#     except Exception as e:
-#         print(f"Failed to send new task status message: {e}")
 
 async def update_task_status_message(bot, user_id):
     """Send a detailed status message and delete the old one."""
@@ -362,62 +283,6 @@ async def update_task_status_message(bot, user_id):
         task_status_messages[user_id] = new_status_message
     except Exception as e:
         print(f"Failed to send new task status message: {e}")
-
-# next:
-# async def update_task_status_message(bot, user_id):
-#     """Send a detailed status message and delete the old one."""
-#     if user_id not in user_tasks or not user_tasks[user_id]["queue"]:
-#         return  # No tasks for this user
-
-#     # Fetch current task stats
-#     active_count = user_tasks[user_id]["active"]
-#     queue = list(user_tasks[user_id]["queue"]._queue)  # Extract queued tasks
-#     queue_count = len(queue)
-
-#     # Build the detailed status message
-#     status_text = (
-#         "<blockquote><b>🥂🍟⏳ ᴛʜᴇ ᴛᴀꜱᴋ ᴍᴀɴᴀɢᴇʀ ⏳🍟🥂</b></blockquote>\n"
-#         "╭━━❰❤.<b>ʟᴀᴢʏᴅᴇᴠᴇʟᴏᴘᴇʀ</b>.❤❱━━➣\n"
-#     )
-
-#     for index, task in enumerate(queue, start=1):
-#         task_id = task["id"]
-#         status_text += (
-#             f"┣⪼🍿 <b>ᴛᴀꜱᴋ {index}</b> ➣ <code>{task_id}</code>\n"
-#             f"┣⪼⚙ <b><a href='https://t.me/{bot.username}?start=gettask_{task_id}'>ɢᴇᴛ ᴅᴇᴛᴀɪʟꜱ : ᴄʟɪᴄᴋ ʜᴇʀᴇ</a></b>\n"
-#             f"┣━━━━━━━━━━━━━━━━━━━ \n"
-#         )
-
-#     # Add summary of active and queued tasks
-#     status_text += (
-#         f"┣📜 <b>ᴀᴄᴛɪᴠᴇ ᴛᴀꜱᴋꜱ</b>: <code>{active_count}</code> | ⏳<b>ɪɴ ϙᴜᴇᴜᴇ</b>: <code>{queue_count}</code>\n"
-#         "╰━━━━━━━━━━━━━━━━━━━➣"
-#     )
-
-#     # Delete the previous status message if it exists
-#     if user_id in task_status_messages:
-#         try:
-#             # Check if the message still exists
-#             old_message = task_status_messages[user_id]
-#             await bot.get_messages(chat_id=user_id, message_ids=old_message.message_id)  # Verify existence
-#             await old_message.delete()
-#         except Exception as e:
-#             print(f"Could not delete previous message: {e}")
-#         finally:
-#             # Remove the old reference from the dictionary
-#             task_status_messages.pop(user_id, None)
-
-#     # Send a new detailed status message and save its reference
-#     try:
-#         new_status_message = await bot.send_message(
-#             chat_id=user_id,
-#             text=status_text,
-#             parse_mode=enums.ParseMode.HTML,
-#             disable_web_page_preview=True,
-#         )
-#         task_status_messages[user_id] = new_status_message
-#     except Exception as e:
-#         print(f"Failed to send new task status message: {e}")
 
 
 # @Client.on_callback_query(filters.regex("upload"))
@@ -531,16 +396,16 @@ async def process_task(bot, user_id, task_data, lazymsg):
         else:
             print("Failed to capture screenshot.")
 
-        try:
-            video_clip_path = f"{os.path.dirname(file_path)}/watermarked_video{os.path.basename(file_path)}"
-            final_video = await add_intro_to_video(file_path, video_clip_path, lazymsg)
-            if final_video:
-                print(f"Watermarked video saved to: {final_video}")
-            else:
-                print("Failed to add watermark.")
-        except Exception as e:
-            print(e)
-            return
+        # try:
+        #     video_clip_path = f"{os.path.dirname(file_path)}/watermarked_video{os.path.basename(file_path)}"
+        #     final_video = await add_intro_to_video(file_path, video_clip_path, lazymsg)
+        #     if final_video:
+        #         print(f"Watermarked video saved to: {final_video}")
+        #     else:
+        #         print("Failed to add watermark.")
+        # except Exception as e:
+        #     logger.info(f"something went wrong : {e}")
+        #     return
 
         
         # print(f"🤳 Got Thumbnail |=> ✅")
