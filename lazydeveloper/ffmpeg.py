@@ -12,6 +12,9 @@ import requests
 import requests
 from PIL import Image
 from io import BytesIO
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
 
 async def fix_thumb(thumb):
     width = 0
@@ -120,10 +123,9 @@ async def progress_bar(current, total, msg, last_reported=0):
 async def add_intro_to_video(main_video_path, output_path, msg):
     try:
         await msg.edit("⚙ Processing to add watermark to video file... \n🧩This may take some time, please be patience \nThank You 💘")
-        # intro_url = "https://raw.githubusercontent.com/criminalCoder/kkk/main/clips/clip.mp4"
-        intro_url = "https://raw.githubusercontent.com/AngelSweety05/expired_rename_repo/blob/main/clips/video_2025-01-01_07-50-44.mp4"
+        intro_url = "https://raw.githubusercontent.com/AngelSweety05/expired_rename_repo/main/clips/cc.mp4"
         intro_path = f"{time.time()}/intro.mp4"
-
+        logger.info(intro_path)
         # Download the intro clip
         intro_path = await download_file(intro_url, intro_path)
         if intro_path is None:
