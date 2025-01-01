@@ -202,6 +202,7 @@ async def extract_movie_details(file_name):
 
     # Languages
     detected_languages = []
+    print(detected_languages)
     clean_file_name = re.sub(r"@[\w_]+", "", file_name)
     for key in languages:
         if key in clean_file_name.lower():
@@ -214,6 +215,7 @@ async def extract_movie_details(file_name):
             detected_languages.append(language_name)
 
     languages_list = "-".join(detected_languages) if detected_languages else None
+    print(languages_list)
 
     return resolution, quality, subtitle, languages_list, codec
 
@@ -323,6 +325,7 @@ async def extract_details(file_name):
 
     # Languages
     detected_languages = []
+    print(detected_languages)
     clean_file_name = re.sub(r"@[\w_]+", "", file_name)
     for key in languages:
         if key in clean_file_name.lower():
@@ -335,7 +338,7 @@ async def extract_details(file_name):
             detected_languages.append(language_name)
 
     languages_list = "-".join(detected_languages) if detected_languages else None
-
+    print(languages_list)
     return season, full_season, episode, resolution, quality, subtitle, languages_list, fullepisode, codec, complete
 
 async def rename_file(file_name, title):
