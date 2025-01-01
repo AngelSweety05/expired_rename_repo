@@ -254,7 +254,7 @@ async def extract_movie_details(file_name, title):
 
 # Renaming logic
 async def rename_movie_file(file_name, title):
-    resolution, quality, subtitle, languages_list, codec = await extract_movie_details(file_name)
+    resolution, quality, subtitle, languages_list, codec = await extract_movie_details(file_name, title)
     
     n_title = title if title is not None else ""  # Placeholder for extracting title (can enhance this further)
     n_resolution = f"{resolution}" if resolution is not None else ""
