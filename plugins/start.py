@@ -9,6 +9,10 @@ from helpo.database import db
 from config import START_PIC, FLOOD, ADMIN 
 from plugins.cb_data import lazydevelopertaskmanager
 import time
+import logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logger = logging.getLogger(__name__)
+
 # ===========================================================================
 # ===========================================================================
                     ### AUTO RENAME = STEP 1
@@ -72,9 +76,6 @@ languages = {
     "BEN": "Bengali",
     "URD": "Urdu",
     "TUR": "Turkish",
-    "THA": "Thai",
-    "VIE": "Vietnamese",
-    "DUT": "Dutch",
     "POL": "Polish",
     "SWE": "Swedish",
     "DAN": "Danish",
@@ -82,13 +83,7 @@ languages = {
     "UKR": "Ukrainian",
     "ROM": "Romanian",
     "FIL": "Filipino",
-    "MLG": "Malay",
-    "AMH": "Amharic",
-    "EST": "Estonian",
-    "LAT": "Latvian",
-    "LIT": "Lithuanian",
     "SRB": "Serbian",
-    "SLV": "Slovenian",
 }
 
 qualities = {
@@ -171,7 +166,8 @@ complete_regex = r"Complete"  # Detects the word "Complete"
 def remove_unwanted_parts(file_name, title):
     # Remove the title from the filename
     file_name = file_name.lower().replace(title.lower(), '')
-    
+    file_name = file_name.replace(title, '')
+    file_name = file_name.replace('mkv', '')
     # Remove resolutions
     for res in resolutions:
         file_name = file_name.replace(res, '')
