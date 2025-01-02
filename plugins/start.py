@@ -28,6 +28,7 @@ resolutions = {
     "360p": "360p",
     "480p": "480p",
     "520p": "520p",
+    "540p": "540p",
     "640p": "640p",
     "720p": "720p",
     "1080p": "1080p",
@@ -87,6 +88,7 @@ languages = {
 qualities = {
     "BLURAY": "BluRay",
     "NF WEB-DL": "NF-WEB-DL",
+    "NF WEBRip": "NF-WEBRip",
     "AMZN WEB-DL": "AMZN-WEB-DL",
     "WEB-DL": "WEB-DL",
     "NF WEBRIP": "NF-WEBRip",
@@ -189,6 +191,11 @@ def remove_unwanted_parts(file_name, title):
 # Function to extract season, episode, resolution, quality, and languages
 async def extract_movie_details(file_name, title):
     # Resolution
+    if "." in file_name:
+        file_name = file_name.replace(".", " ")
+    if "_" in file_name:
+        file_name = file_name.replace("_", " ")
+    print(file_name)
     resolution = None
     for key in resolutions:
         if key.lower() in file_name.lower():
@@ -280,6 +287,12 @@ async def is_webseries(file_name):
 
 async def extract_details(file_name, title):
     # Season and Episode
+    if "." in file_name:
+        file_name = file_name.replace(".", " ")
+    if "_" in file_name:
+        file_name = file_name.replace("_", " ")
+    print(file_name)
+    
     season_match = re.search(season_regex, file_name, re.IGNORECASE)
     multi_episode_match1 = re.search(multi_episode_regex1, file_name, re.IGNORECASE)
     multi_episode_match2 = re.search(multi_episode_regex2, file_name, re.IGNORECASE)
