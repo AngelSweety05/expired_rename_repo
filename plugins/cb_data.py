@@ -520,7 +520,7 @@ async def process_task(bot, user_id, task_data, lazymsg):
             skiped_lazy_files = 0
             # (C) LazyDeveloperr ❤
             try:
-                async for msg in run_lazybot.iter_messages(lazy_target_chat_id, limit=10, reverse=True):
+                async for msg in run_lazybot.iter_messages(lazy_target_chat_id, limit=10, reverse=False):
                     # Forward or process the message
                     if forwarded_lazy_count >= max_forward_lazy_count:
                         forwarded_lazy_count = 0
