@@ -496,6 +496,106 @@ async def forward_status(client, message):
         await message.reply("<blockquote>⏳ sᴛᴀᴛᴜs => ɴᴏᴛ ꜰᴏᴜɴᴅ 💔</blockquote>\nɪ'ᴠᴇ ᴅᴇᴄɪᴅᴇᴅ ᴛᴏ ꜰᴏʀᴡᴀʀᴅ ʏᴏᴜ ᴀ ɴᴇᴡ ꜰɪʟᴇ ᴀꜰᴛᴇʀ ʀᴇɴᴀᴍɪɴɢ ᴇᴀᴄʜ ꜰɪʟᴇ", parse_mode=enums.ParseMode.HTML)
     return
 
+
+
+# ======================================================
+# ======================================================
+@Client.on_message(filters.private & filters.command("index_db"))
+async def indexdb(client, message):
+    # setting up target chat id to take post from - BASE-CHANNEL
+    user_id = message.from_user.id
+    if not await db.is_user_exist(user_id):
+        await db.add_user(user_id)
+    lazyid = message.from_user.id
+
+    if not await verify_user(lazyid):
+        return await message.reply("⛔ You are not authorized to use this bot.")
+    
+    chat_id_msg = await client.ask(
+        text="📂 Send DATABASE Channel Id, To Where You Want Posts To Be Forwarded: in `-100XXXX` Format",
+        chat_id=message.chat.id,
+        filters=filters.text
+    )
+
+    try:
+        target_chat_id = int(chat_id_msg.text)
+        await db.set_forward(user_id, target_chat_id)
+        await chat_id_msg.reply(f"📂 Index DATABASE ID {target_chat_id} has been updated successfully.")
+    except ValueError as e:
+        await chat_id_msg.reply("Please send valid channel id")
+        print(e)
+        return
+
+@Client.on_message(filters.private & filters.command("view_db"))
+async def viewdb(client, message):
+    user_id = message.from_user.id
+    lazyid = message.from_user.id
+    if not await db.is_user_exist(user_id):
+        await db.add_user(user_id)
+
+    if not await verify_user(lazyid):
+        return await message.reply("⛔ You are not authorized to use this bot.")
+    
+    try:
+        id = await db.set_forward(user_id)
+        await message.reply(f"📂Here is your current DB-CHANNEL-ID\n├🆔 {id}")
+    except Exception as lazyerror:
+        print(lazyerror)
+        await message.reply("Something went wrong, PLease try again later...")
+        return
+
+
+# ======================================================
+
+@Client.on_message(filters.private & filters.command("index_channel"))
+async def indexdb(client, message):
+    # setting up target chat id to take post from - BASE-CHANNEL
+    user_id = message.from_user.id
+    if not await db.is_user_exist(user_id):
+        await db.add_user(user_id)
+    lazyid = message.from_user.id
+
+    if not await verify_user(lazyid):
+        return await message.reply("⛔ You are not authorized to use this bot.")
+    
+    chat_id_msg = await client.ask(
+        text="🎯 Send Index Channel Id, From Where You Want Posts To Be Forwarded: in `-100XXXX` Format",
+        chat_id=message.chat.id,
+        filters=filters.text
+    )
+
+    try:
+        target_chat_id = int(chat_id_msg.text)
+        await db.set_lazy_target_chat_id(user_id, target_chat_id)
+        await chat_id_msg.reply(f"🎯 Index Channel ID {target_chat_id} has been updated successfully.")
+    except ValueError as e:
+        await chat_id_msg.reply("Please send valid channel id")
+        print(e)
+        return
+
+@Client.on_message(filters.private & filters.command("view_channel"))
+async def viewdb(client, message):
+    user_id = message.from_user.id
+    lazyid = message.from_user.id
+    if not await db.is_user_exist(user_id):
+        await db.add_user(user_id)
+
+    if not await verify_user(lazyid):
+        return await message.reply("⛔ You are not authorized to use this bot.")
+    
+    try:
+        id = await db.get_lazy_target_chat_id(user_id)
+        await message.reply(f"🎯Here is your current DB-CHANNEL-ID\n├🆔 {id}")
+    except Exception as lazyerror:
+        print(lazyerror)
+        await message.reply("Something went wrong, PLease try again later...")
+        return
+
+
+# ======================================================
+# ======================================================
+
+
 async def verify_forward_status(user_id: int):
     status = await db.get_forward_after_rename(user_id)
     
