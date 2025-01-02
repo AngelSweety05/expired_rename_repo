@@ -136,8 +136,6 @@ codecs = {
     "EAC3": "EAC3",
     "AC3": "AC3",
     "PCM": "PCM",
-    "SD": "SD",
-    "HD": "HD",
     "FHD": "Full HD",
     "QHD": "Quad HD",
     "HDR10": "HDR10",
