@@ -85,6 +85,7 @@ qualities = {
     "NF WEBRIP": "NF-WEBRip",
     "AMZN WEBRIP": "AMZN-WEBRip",
     "WEBRIP": "WEBRip",
+    "hq hdrip" : "HQ HDRip",
     "HDRIP": "HDRip",
     "DVDRIP": "DVDRip",
     "HDTV": "HDTV",
@@ -196,6 +197,8 @@ async def extract_movie_details(filenmx, title):
     if "_" in file_name:
         file_name = file_name.replace("_", " ")
     logger.info(file_name)
+    cleaned_file_name = await remove_unwanted_parts(file_name, title)
+    logger.info(cleaned_file_name)
     resolution = None
     for key in resolutions:
         if key.lower() in file_name.lower():
@@ -216,6 +219,7 @@ async def extract_movie_details(filenmx, title):
         if key.lower() in file_name.lower():
             quality = qualities[key]
             break
+
     audio = None
     for key in audios:
         if key.lower() in file_name.lower():
@@ -230,8 +234,7 @@ async def extract_movie_details(filenmx, title):
             break
 
 # =================== little complex =========================== 
-    cleaned_file_name = await remove_unwanted_parts(file_name, title)
-    logger.info(cleaned_file_name)
+
     # Languages
     detected_languages = []
     for key in languages:
@@ -247,11 +250,11 @@ async def extract_movie_details(filenmx, title):
     languages_list = "-".join(detected_languages) if detected_languages else None
     print(languages_list)
 
-    return resolution, quality, subtitle, languages_list, codec
+    return resolution, quality, subtitle, audio, languages_list, codec
 
 # Renaming logic
 async def rename_movie_file(file_name, title):
-    resolution, quality, subtitle, languages_list, codec = await extract_movie_details(file_name, title)
+    resolution, quality, subtitle, audio, languages_list, codec = await extract_movie_details(file_name, title)
     
     n_title = title if title is not None else ""  # Placeholder for extracting title (can enhance this further)
     n_resolution = f"{resolution} •" if resolution is not None else ""
@@ -259,8 +262,9 @@ async def rename_movie_file(file_name, title):
     n_languages = f"[{languages_list}]" if languages_list is not None else ""
     n_subtitle = f"{subtitle}" if subtitle is not None else ""
     n_codec = f"{codec}" if codec is not None else ""
+    n_audio = f"{audio}" if audio is not None else ""
 
-    new_name = f"{n_resolution} {n_title} {n_codec} {n_quality} {n_languages} {n_subtitle}"
+    new_name = f"{n_resolution} {n_title} {n_codec} {n_quality} {n_audio} {n_languages} {n_subtitle}"
     clean_new_name = re.sub(r'\s+', ' ', new_name).strip()
 
     return clean_new_name
@@ -293,6 +297,8 @@ async def extract_details(filenmx, title):
     if "_" in file_name:
         file_name = file_name.replace("_", " ")
     print(file_name)
+    cleaned_file_name = await remove_unwanted_parts(file_name, title)
+    logger.info(cleaned_file_name)
     
     season_match = re.search(season_regex, file_name, re.IGNORECASE)
     multi_episode_match1 = re.search(multi_episode_regex1, file_name, re.IGNORECASE)
@@ -360,9 +366,11 @@ async def extract_details(filenmx, title):
             subtitle = subtitles[key]
             break
 
-    # Languages
-    cleaned_file_name = await remove_unwanted_parts(file_name, title)
-    logger.info(cleaned_file_name)
+    audio = None
+    for key in audios:
+        if key.lower() in file_name.lower():
+            audio = audios[key]
+            break
     # Languages
     detected_languages = []
     for key in languages:
@@ -378,15 +386,16 @@ async def extract_details(filenmx, title):
     languages_list = "-".join(detected_languages) if detected_languages else None
     print(languages_list)
 
-    return season, full_season, episode, resolution, quality, subtitle, languages_list, fullepisode, codec, complete
+    return season, full_season, episode, resolution, quality, subtitle, audio, languages_list, fullepisode, codec, complete
 
 async def rename_file(file_name, title):
-    season, full_season, episode, resolution, quality, subtitle, languages_list, fullepisode, codec, complete = await extract_details(file_name, title)
+    season, full_season, episode, resolution, quality, subtitle, audio, languages_list, fullepisode, codec, complete = await extract_details(file_name, title)
     n_title = title if title is not None else ""  # Placeholder for extracting title (can enhance this further)
     # n_title = extract_title(file_name)   # Placeholder for extracting title (can enhance this further)
 
     n_season = f"{season} •" if season is not None else ""
     n_episode = f"{episode} •" if episode is not None else ""
+    n_audio = f"{audio}" if audio is not None else ""
     n_fullepisode = f"[{fullepisode}]" if fullepisode is not None else ""
     n_resolution = f"{resolution}" if resolution is not None else ""
     n_quality = f"{quality}" if quality is not None else ""
@@ -395,7 +404,7 @@ async def rename_file(file_name, title):
     n_subtitle = f"{subtitle}" if subtitle is not None else ""
     n_codec = f"{codec}" if codec is not None else ""
     n_complete = f"{complete} •" if complete is not None else ""
-    new_name = f"{n_season} {n_complete} {n_episode} {n_title} {n_fullseason} {n_fullepisode} {n_resolution} {n_codec} {n_quality} {n_languages} {n_subtitle}"
+    new_name = f"{n_season} {n_complete} {n_episode} {n_title} {n_fullseason} {n_fullepisode} {n_resolution} {n_codec} {n_quality} {n_audio} {n_languages} {n_subtitle}"
     clean_new_name = re.sub(r'\s+', ' ', new_name).strip()
     return clean_new_name
 # ========================== for webseries 👆 ==========================
