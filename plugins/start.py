@@ -37,16 +37,7 @@ resolutions = {
     "4320p": "4320p",
     "4k": "4K UHD",
     "8k": "8K UHD",
-    "SD": "Standard Definition",
-    "HD": "High Definition",
-    "FHD": "Full HD",
-    "QHD": "Quad HD",
-    "UHD": "Ultra HD",
     "2K": "2K",
-    "HDR": "High Dynamic Range",
-    "HDR10": "HDR10",
-    "HDR10+": "HDR10+",
-    "Dolby Vision": "Dolby Vision",
     "720i": "720i",
     "1080i": "1080i",
     "2.7K": "2.7K",
@@ -109,7 +100,6 @@ qualities = {
     "10Bit HDR": "10Bit HDR",
     "8K WEB-DL": "8K WEB-DL",
     "8K HDR": "8K HDR",
-    "UHD BluRay": "UHD BluRay",
 }
 
 subtitles = {
@@ -117,8 +107,8 @@ subtitles = {
     "esub": "ESub",
     "hsubs": "HSub",
     "hsub": "HSub",
-    "forced": "Forced Subtitles",
-    "multi": "Multi-Language Subtitles",
+    "forcedsub": "Forced Subtitles",
+    "multisub": "Multi-Language Subtitles",
     "cc": "Closed Captions",
     "subs": "Subtitles",
     "dualsub": "Dual Subtitles",
@@ -143,7 +133,17 @@ codecs = {
     "MP3": "MP3",
     "EAC3": "EAC3",
     "AC3": "AC3",
-    "PCM": "PCM"
+    "PCM": "PCM",
+    "UHD BluRay": "UHD BluRay",
+    "SD": "Standard Definition",
+    "HD": "High Definition",
+    "FHD": "Full HD",
+    "QHD": "Quad HD",
+    "UHD": "Ultra HD",
+    "HDR": "High Dynamic Range",
+    "HDR10": "HDR10",
+    "HDR10+": "HDR10+",
+    "Dolby Vision": "Dolby Vision",
 }
 
 # Updated regex patterns
@@ -163,7 +163,7 @@ complete_regex = r"Complete"  # Detects the word "Complete"
 # 
 
 
-def remove_unwanted_parts(file_name, title):
+async def remove_unwanted_parts(file_name, title):
     # Remove the title from the filename
     file_name = file_name.lower().replace(title.lower(), '')
     file_name = file_name.replace(title, '')
@@ -189,13 +189,14 @@ def remove_unwanted_parts(file_name, title):
     return file_name.strip()
 
 # Function to extract season, episode, resolution, quality, and languages
-async def extract_movie_details(file_name, title):
+async def extract_movie_details(filenmx, title):
     # Resolution
+    file_name = filenmx
     if "." in file_name:
         file_name = file_name.replace(".", " ")
     if "_" in file_name:
         file_name = file_name.replace("_", " ")
-    print(file_name)
+    logger.info(file_name)
     resolution = None
     for key in resolutions:
         if key.lower() in file_name.lower():
@@ -230,8 +231,8 @@ async def extract_movie_details(file_name, title):
             break
 
 # =================== little complex =========================== 
-    cleaned_file_name = remove_unwanted_parts(file_name, title)
-    print(cleaned_file_name)
+    cleaned_file_name = await remove_unwanted_parts(file_name, title)
+    logger.info(cleaned_file_name)
     # Languages
     detected_languages = []
     for key in languages:
@@ -285,7 +286,8 @@ async def is_webseries(file_name):
         return True  # File is part of a web series
     return False  # Not a web series file
 
-async def extract_details(file_name, title):
+async def extract_details(filenmx, title):
+    file_name = filenmx
     # Season and Episode
     if "." in file_name:
         file_name = file_name.replace(".", " ")
@@ -360,8 +362,8 @@ async def extract_details(file_name, title):
             break
 
     # Languages
-    cleaned_file_name = remove_unwanted_parts(file_name, title)
-    print(cleaned_file_name)
+    cleaned_file_name = await remove_unwanted_parts(file_name, title)
+    logger.info(cleaned_file_name)
     # Languages
     detected_languages = []
     for key in languages:
@@ -561,7 +563,6 @@ async def cb_handler(client, query: CallbackQuery):
             await query.message.reply_to_message.delete()
         except:
             await query.message.delete()
-
 
 
 
