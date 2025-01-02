@@ -166,7 +166,7 @@ async def remove_unwanted_parts(file_name, title):
     # Remove the title from the filename
     title = title.lower()
     try:
-        file_name = re.sub(r"\(\d{4}\)", "", title).strip()
+        title = re.sub(r"\(\d{4}\)", "", title).strip()
     except Exception as e:
         logger.info(f"😂Known Error : {e}")
         pass
