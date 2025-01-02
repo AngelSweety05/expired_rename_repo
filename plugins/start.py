@@ -165,20 +165,20 @@ complete_regex = r"Complete"  # Detects the word "Complete"
 
 async def remove_unwanted_parts(file_name, title):
     # Remove the title from the filename
-    file_name = file_name.lower().replace(title.lower(), '')
-    file_name = file_name.replace(title, '')
-    file_name = file_name.replace('mkv', '')
+    file_name = file_name.lower().replace(title.lower(), ' ')
+    file_name = file_name.lower().replace(title, ' ')
+    file_name = file_name.lower().replace('mkv', ' ')
     # Remove resolutions
     for res in resolutions:
-        file_name = file_name.replace(res, '')
+        file_name = file_name.lower().replace(res, '')
 
     # Remove codecs
     for codec in codecs:
-        file_name = file_name.replace(codec, '')
+        file_name = file_name.lower().replace(codec, '')
 
     # Remove subtitles
     for subtitle in subtitles:
-        file_name = file_name.replace(subtitle, '')
+        file_name = file_name.lower().replace(subtitle, '')
 
     # Remove any other known unwanted elements like season/episode patterns, extra spaces, special characters
     file_name = re.sub(r'[^\w\s]', '', file_name)  # Remove special characters
