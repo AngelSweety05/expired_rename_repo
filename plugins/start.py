@@ -263,13 +263,14 @@ async def rename_movie_file(file_name, title):
     
     n_title = title if title is not None else ""  # Placeholder for extracting title (can enhance this further)
     n_resolution = f"{resolution} •" if resolution is not None else ""
+    r_resolution = f"{resolution}" if resolution is not None else ""
     n_quality = f"{quality}" if quality is not None else ""
     n_languages = f"[{languages_list}]" if languages_list is not None else ""
     n_subtitle = f"{subtitle}" if subtitle is not None else ""
     n_codec = f"{codec}" if codec is not None else ""
     n_audio = f"{audio}" if audio is not None else ""
 
-    new_name = f"{n_resolution} {n_title} - {n_resolution} {n_codec} {n_quality} {n_audio} {n_languages} {n_subtitle}"
+    new_name = f"{n_resolution} {n_title} - {r_resolution} {n_codec} {n_quality} {n_audio} {n_languages} {n_subtitle}"
     clean_new_name = re.sub(r'\s+', ' ', new_name).strip()
 
     return clean_new_name
