@@ -100,6 +100,7 @@ qualities = {
     "10Bit HDR": "10Bit HDR",
     "8K WEB-DL": "8K WEB-DL",
     "8K HDR": "8K HDR",
+
 }
 
 subtitles = {
@@ -134,13 +135,10 @@ codecs = {
     "EAC3": "EAC3",
     "AC3": "AC3",
     "PCM": "PCM",
-    "UHD BluRay": "UHD BluRay",
-    "SD": "Standard Definition",
-    "HD": "High Definition",
+    "SD": "SD",
+    "HD": "HD",
     "FHD": "Full HD",
     "QHD": "Quad HD",
-    "UHD": "Ultra HD",
-    "HDR": "High Dynamic Range",
     "HDR10": "HDR10",
     "HDR10+": "HDR10+",
     "Dolby Vision": "Dolby Vision",
@@ -165,6 +163,7 @@ complete_regex = r"Complete"  # Detects the word "Complete"
 
 async def remove_unwanted_parts(file_name, title):
     # Remove the title from the filename
+    file_name = re.sub(r"\(\d{4}\)", "", title).strip()
     file_name = file_name.lower().replace(title.lower(), ' ')
     file_name = file_name.lower().replace(title, ' ')
     file_name = file_name.lower().replace('mkv', ' ')
