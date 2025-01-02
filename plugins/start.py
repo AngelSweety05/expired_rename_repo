@@ -164,8 +164,12 @@ complete_regex = r"Complete"  # Detects the word "Complete"
 
 async def remove_unwanted_parts(file_name, title):
     # Remove the title from the filename
-    file_name = re.sub(r"\(\d{4}\)", "", title).strip()
-    file_name = file_name.lower().replace(title.lower(), ' ')
+    title = title.lower()
+    try:
+        file_name = re.sub(r"\(\d{4}\)", "", title).strip()
+    except Exception as e:
+        logger.info(f"😂Known Error : {e}")
+        pass
     file_name = file_name.lower().replace(title, ' ')
     file_name = file_name.lower().replace('mkv', ' ')
     # Remove resolutions
@@ -196,9 +200,9 @@ async def extract_movie_details(filenmx, title):
         file_name = file_name.replace(".", " ")
     if "_" in file_name:
         file_name = file_name.replace("_", " ")
-    logger.info(file_name)
+    logger.info(f"📽 ORG Name : {file_name}")
     cleaned_file_name = await remove_unwanted_parts(file_name, title)
-    logger.info(cleaned_file_name)
+    logger.info(f"🧩Cleaned file name = {cleaned_file_name}")
     resolution = None
     for key in resolutions:
         if key.lower() in file_name.lower():
@@ -248,7 +252,7 @@ async def extract_movie_details(filenmx, title):
             detected_languages.append(language_name)
     
     languages_list = "-".join(detected_languages) if detected_languages else None
-    print(languages_list)
+    # print(languages_list)
 
     return resolution, quality, subtitle, audio, languages_list, codec
 
