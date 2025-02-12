@@ -271,6 +271,7 @@ async def update_task_status_message(bot, user_id):
             await task_status_messages[user_id].delete()
         except Exception as e:
             print(f"Failed to delete previous status message: {e}")
+            task_status_messages.pop(user_id, None)
 
     # Send a new detailed status message and save its reference
     try:
