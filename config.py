@@ -10,9 +10,9 @@ BOT_TOKEN = os.environ.get("BOT_TOKEN", "7183574921:AAG3RYF4JFMgNwhwUWNprqIFwNLq
 
 FORCE_SUB = os.environ.get("FORCE_SUB", "LazyDeveloper") 
 
-DB_NAME = os.environ.get("DB_NAME","lazydev786")     
+DB_NAME = os.environ.get("DB_NAME","Cluster0")     
 
-DB_URL = os.environ.get("DB_URL","mongodb+srv://lazy:Zabintkhab7808@lazydev786.lpvunl5.mongodb.net/?retryWrites=true&w=majority")
+DB_URL = os.environ.get("DB_URL","mongodb+srv://lazytest:lazytest@cluster0.a0s61.mongodb.net/?retryWrites=true&w=majority")
 
 FLOOD = int(os.environ.get("FLOOD", "10"))
 
