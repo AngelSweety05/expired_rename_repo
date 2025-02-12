@@ -12,7 +12,6 @@ class mr(object):
 ╭───────────⍟
 ├🤖 ᴍʏ ɴᴀᴍᴇ : {}
 ├🦋 ᴅᴇᴠᴇʟᴏᴘᴇʀ : <a href=https://telegram.me/LazyDeveloperr>LazyDeveloperr</a> 
-├👨‍💻 ᴘʀᴏɢʀᴀᴍᴇʀ : <a href=https://github.com/LazyDeveloperr>LazyDeveloperr</a>
 ├📕 ʟɪʙʀᴀʀʏ : <a href=https://github.com/pyrogram>ᴘʏʀᴏɢʀᴀᴍ</a>
 ├✏️ ʟᴀɴɢᴜᴀɢᴇ : <a href=https://www.python.org>ᴘʏᴛʜᴏɴ 3</a>
 ├💾 ᴅᴀᴛᴀ ʙᴀsᴇ : <a href=https://cloud.mongodb.com>ᴍᴏɴɢᴏᴅʙ</a>
