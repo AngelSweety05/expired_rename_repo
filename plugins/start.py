@@ -161,7 +161,17 @@ complete_regex = r"Complete"  # Detects the word "Complete"
 
 
 # 
-
+unwanted_list = [
+            '.','@','movies4u', 'pop', 'bid', 'clipmatemovies','clipmatemovie', 'bm_links', 
+            'clipmatemovies', 'bm_links', 'piro', 'team_tamilanda', 'real_moviesadda', 
+            'moviezaddiction', 'hdmovies', 'movieshub', 'telegrammovies', 'moviesboss', 
+            'tamilrockers', 'katmoviehd', 'mkvcinemas', 'bolly4u', 'extramovies', '9xmovies', 
+            'movierulz', 'hdhub4u', 'filmyzilla', 'worldfree4u', 'khatrimaza', 'desiremovies', 
+            'mp4mania', 'skymovies', 'gofilms4u', 
+            'pahe',    'watch online', 'free download', 'full hd', 'ad-free', 'no ads', 'official', 
+            'exclusive', 'fast download', 'best quality', 'original print',
+            'mkv', 'mp4', 'avi', 'flv', 'mov', 'wmv', 'webm', 'mpeg', 'mpg'
+        ]
 
 async def remove_unwanted_parts(file_name, title):
     # Remove the title from the filename
@@ -172,7 +182,11 @@ async def remove_unwanted_parts(file_name, title):
         logger.info(f"😂Known Error : {e}")
         pass
     file_name = file_name.lower().replace(title, ' ')
-    file_name = file_name.lower().replace('mkv', ' ')
+
+    # Remove all unwanted words
+    for word in unwanted_list:
+        file_name = file_name.replace(word.lower(), ' ').strip()
+    print(f"this is cleaned : {file_name} ")
     # Remove resolutions
     for res in resolutions:
         file_name = file_name.lower().replace(res, '')
@@ -278,7 +292,13 @@ async def rename_movie_file(file_name, title):
 # ========================== for webseries 👇 ==========================
 # Function to extract type, season, episode, resolution, quality, and languages
 
-async def is_webseries(file_name):
+async def is_webseries(file_name, title):
+    if "." in file_name:
+        file_name = file_name.replace(".", " ")
+    if "_" in file_name:
+        file_name = file_name.replace("_", " ")
+    cleaned_file_name = await remove_unwanted_parts(file_name, title)
+
     # Patterns to match web series characteristics
     season_regex = r"S(\d{1,3})"  # Matches season numbers like "S01"
     episode_regex = r"(EP|\bE)(\d{1,3})"  # Matches episode numbers like "E01"
@@ -287,10 +307,10 @@ async def is_webseries(file_name):
 
     # Check for any match
     if (
-        re.search(season_regex, file_name, re.IGNORECASE) or
-        re.search(episode_regex, file_name, re.IGNORECASE) or
+        re.search(season_regex, cleaned_file_name, re.IGNORECASE) or
+        re.search(episode_regex, cleaned_file_name, re.IGNORECASE) or
         # re.search(complete_regex, file_name, re.IGNORECASE) or
-        re.search(season_keyword_regex, file_name, re.IGNORECASE)
+        re.search(season_keyword_regex, cleaned_file_name, re.IGNORECASE)
     ):
         return True  # File is part of a web series
     return False  # Not a web series file
@@ -440,21 +460,10 @@ async def auto_rename(client, message):
         return message.reply("😕 ᴘʟᴇᴀsᴇ ᴍᴀᴋᴇ sᴜʀᴇ ᴛʜᴀᴛ ʏᴏᴜ ʜᴀᴠᴇ ᴍᴇɴᴛɪᴏɴᴇᴅ sᴇʀɪᴇs ɴᴀᴍᴇ ɪɴ ғɪʟᴇ...")
 
     lazymsg = await message.reply(f"<b>🤞 ʟᴇᴛ ᴛʜᴇ ᴍᴀɢɪᴄ ʙᴇɢɪɴ... ❤</b>", parse_mode=enums.ParseMode.HTML)
-    if await is_webseries(filename):
+    if await is_webseries(filename, title):
         print("Detected webseries")
         new_file_name = await rename_file(filename, title)
-        # try:
-        #     if not "." in new_file_name:
-        #         if "." in file.file_name:
-        #             extn = file.file_name.rsplit('.', 1)[-1]
-        #         else:
-        #             extn = "mkv"
-        #     # watermark = "@real_MoviesAdda6"
-        #     new_lazy_name = new_file_name + " @real_MoviesAdda6." + extn
-        # except Exception as e:
-        #     new_lazy_name = new_file_name + " @real_MoviesAdda6.mkv"
-        #     print(e)
-        #     pass
+
         new_lazy_name = await check_extension_and_watermark(file, new_file_name)
     else:
         new_file_name = await rename_movie_file(filename, title)
@@ -577,7 +586,3 @@ async def cb_handler(client, query: CallbackQuery):
             await query.message.reply_to_message.delete()
         except:
             await query.message.delete()
-
-
-
-
