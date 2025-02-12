@@ -397,16 +397,16 @@ async def process_task(bot, user_id, task_data, lazymsg):
         else:
             print("Failed to capture screenshot.")
 
-        try:
-            video_clip_path = f"{os.path.dirname(file_path)}/watermarked_video{os.path.basename(file_path)}"
-            final_video = await add_intro_to_video(file_path, video_clip_path, lazymsg)
-            if final_video:
-                print(f"Watermarked video saved to: {final_video}")
-            else:
-                print("Failed to add watermark.")
-        except Exception as e:
-            logger.info(f"something went wrong : {e}")
-            return
+        #try:
+          #  video_clip_path = f"{os.path.dirname(file_path)}/watermarked_video{os.path.basename(file_path)}"
+           # final_video = await add_intro_to_video(file_path, video_clip_path, lazymsg)
+           # if final_video:
+             #   print(f"Watermarked video saved to: {final_video}")
+           # else:
+           #     print("Failed to add watermark.")
+       # except Exception as e:
+           # logger.info(f"something went wrong : {e}")
+           # return
 
         
         # print(f"🤳 Got Thumbnail |=> ✅")
@@ -446,7 +446,7 @@ async def process_task(bot, user_id, task_data, lazymsg):
             elif type == "video":
                 suc = await bot.send_video(
                     update.chat.id,
-                    video=final_video,
+                    video=file_path,
                     caption=caption,
                     thumb=watermarked_image,
                     duration=duration,
