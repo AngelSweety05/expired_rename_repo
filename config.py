@@ -2,9 +2,9 @@ import re, os
 
 id_pattern = re.compile(r'^.\d+$') 
 
-API_ID = os.environ.get("API_ID", "24638450")
+API_ID = os.environ.get("API_ID", "23265307")
 
-API_HASH = os.environ.get("API_HASH", "b720cf2f8cd64bc0ecee7ea3652a1cd1")
+API_HASH = os.environ.get("API_HASH", "cc2b82ee80cabeba9a3408a6972d0ab2")
 
 BOT_TOKEN = os.environ.get("BOT_TOKEN", "7183574921:AAG3RYF4JFMgNwhwUWNprqIFwNLqPoo9oW8") 
 
@@ -16,7 +16,7 @@ DB_URL = os.environ.get("DB_URL","mongodb+srv://lazytest:lazytest@cluster0.a0s61
 
 FLOOD = int(os.environ.get("FLOOD", "10"))
 
-START_PIC = os.environ.get("START_PIC", "https://i.ibb.co/rv8Lds3/ALL-RENAMER-LOGO-YASH-GOYAL.jpg")
+START_PIC = os.environ.get("START_PIC", "https://i.ibb.co/NHdvRwk/missdevil.jpg")
 
 ADMIN = [int(admin) if id_pattern.search(admin) else admin for admin in os.environ.get('ADMIN', '5965340120 6126812037').split()]
 
