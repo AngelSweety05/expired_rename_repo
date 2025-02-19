@@ -326,13 +326,13 @@ async def extract_details(filenmx, title):
     cleaned_file_name = await remove_unwanted_parts(file_name, title)
     logger.info(cleaned_file_name)
     
-    season_match = re.search(season_regex, file_name, re.IGNORECASE)
-    multi_episode_match1 = re.search(multi_episode_regex1, file_name, re.IGNORECASE)
-    multi_episode_match2 = re.search(multi_episode_regex2, file_name, re.IGNORECASE)
-    episode_match1 = re.search(episode_regex1, file_name, re.IGNORECASE)
-    episode_match2 = re.search(episode_regex2, file_name, re.IGNORECASE)
-    special_match = re.search(special_episode_regex, file_name, re.IGNORECASE)
-    complete_match = re.search(complete_regex, file_name, re.IGNORECASE)  # Case-insensitive matching for "Complete"
+    season_match = re.search(season_regex, cleaned_file_name, re.IGNORECASE)
+    multi_episode_match1 = re.search(multi_episode_regex1, cleaned_file_name, re.IGNORECASE)
+    multi_episode_match2 = re.search(multi_episode_regex2, cleaned_file_name, re.IGNORECASE)
+    episode_match1 = re.search(episode_regex1, cleaned_file_name, re.IGNORECASE)
+    episode_match2 = re.search(episode_regex2, cleaned_file_name, re.IGNORECASE)
+    special_match = re.search(special_episode_regex, cleaned_file_name, re.IGNORECASE)
+    complete_match = re.search(complete_regex, cleaned_file_name, re.IGNORECASE)  # Case-insensitive matching for "Complete"
 
     # getting values
     season = f"S{int(season_match.group(1)):02}" if season_match else None
@@ -381,7 +381,7 @@ async def extract_details(filenmx, title):
     # Quality
     quality = None
     for key in qualities:
-        if key.lower() in file_name.lower():
+        if key.lower() in cleaned_file_name.lower():
             quality = qualities[key]
             break
     
@@ -394,7 +394,7 @@ async def extract_details(filenmx, title):
 
     audio = None
     for key in audios:
-        if key.lower() in file_name.lower():
+        if key.lower() in cleaned_file_name.lower():
             audio = audios[key]
             break
     # Languages
